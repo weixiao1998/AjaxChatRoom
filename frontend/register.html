@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ajax聊天室-注册</title>
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/scaffolding.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+<!-- 主体 -->
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="login.html">Ajax聊天室</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="login.html">登录 <span class="sr-only">(current)</span></a></li>
+                    <li><a href="register.html">注册</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="col-xs-12 col-md-10 col-md-offset-1">
+            <div class="well">
+                <div class="row text-center">
+                    <h4>注册新用户</h4>
+                </div>
+                <!-- 注册表单 -->
+                <form class="form-horizontal">
+                    <!-- 用户名 -->
+                    <div class="form-group">
+                        <label for="uname" class="col-md-4 control-label">用户名：</label>
+                        <div class="col-md-4">
+                            <input id="uname" type="text" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <span id="unameMsg" class="help-block"></span>
+                        </div>
+                    </div>
+                    <!-- 昵称 -->
+                    <div class="form-group">
+                        <label for="nickname" class="col-md-4 control-label">昵称：</label>
+                        <div class="col-md-4">
+                            <input id="nickname" type="text" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <!-- 密码 -->
+                    <div class="form-group">
+                        <label for="upwd" class="col-md-4 control-label">密码：</label>
+                        <div class="col-md-4">
+                            <input id="upwd" type="password" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <!-- 确认密码 -->
+                    <div class="form-group">
+                        <label for="repwd" class="col-md-4 control-label">确认密码：</label>
+                        <div class="col-md-4">
+                            <input id="repwd" type="password" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <!-- 性别 -->
+                    <div class="form-group">
+                        <label for="sex" class="col-md-4 control-label">性别：</label>
+                        <div class="col-md-4">
+                            <select id="sex" class="form-control">
+                                <option value="男" >男</option>
+                                <option value="女" >女</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <!-- 年龄 -->
+                    <div class="form-group">
+                        <label for="age" class="col-md-4 control-label">年龄：</label>
+                        <div class="col-md-4">
+                            <input type="number" class="form-control" id="age" min="1" max="150" value="18"/>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <!-- 兴趣爱好 -->
+                    <div class="form-group">
+                        <label for="hobby" class="col-md-4 control-label">兴趣爱好：</label>
+                        <div class="col-md-4">
+                            <input id="hobby" type="text" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 col-md-offset-4">
+                            <button id="btRegister" type="button" class="btn btn-info form-control">提交注册信息</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<script>
+
+    /*为btRegister按钮添加事件监听*/
+    $('#btRegister').click(function(){
+        //读取所有的表单输入
+        let uname = $('#uname').val()
+        let nickname = $('#uname').val()
+        let upwd = $('#upwd').val()
+        let repwd = $('#repwd').val()
+        let sex = $('#sex').val()
+        let age = $('#age').val()
+        let hobby = $('#hobby').val()
+        console.log(uname,nickname,upwd,repwd,sex,age,hobby)
+        //验证表单输入的合法性
+        if(uname.length<3){
+            $('#unameMsg').html('用户名长度太短了').removeClass('alert-info').addClass('alert-danger')
+        } else if(uname.length>12){
+            $('#unameMsg').html('用户名长度太长了').removeClass('alert-info').addClass('alert-danger')
+        } else {
+            $('#unameMsg').html('用户名长度合法').removeClass('alert-danger').addClass('alert-info')
+        }
+        //异步提交用户的输入给后台API
+        $.ajax({
+            method: 'POST',
+            url: 'http://127.0.0.1:5050/user/register',
+            data: `uname=${uname}&upwd=${upwd}&email=${email}&phone=${phone}`,
+            success: (data, msg, xhr)=>{
+                console.log('ok')
+                if(data.code===200){
+                    $('#modalRegisterSucc').modal()
+                } else {
+                    $('#serverErrMsg').html(data.msg)
+                    $('#modalRegisterErr').modal()
+                }
+            },
+            error: (xhr,err)=>{
+                console.log('err')
+                console.log(xhr)
+                console.log(err)
+            }
+        })
+    })
+</script>
+<!-- 弹出式对话框：表示注册成功 -->
+<div id="modalRegisterSucc" class="modal fade"> <!-- 半透明遮罩 -->
+    <div class="modal-dialog modal-sm"> <!-- 对话框尺寸、位置 -->
+        <div class="modal-content"> <!--边框、倒角、背景色-->
+            <!-- 头部 -->
+            <div class="modal-header">
+                <h4 class="modal-title">注册成功</h4>
+            </div>
+            <!-- 主体 -->
+            <div class="modal-body">
+                <p>新用户注册成功！</p>
+            </div>
+            <!-- 尾部 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 弹出式对话框：表示注册失败 -->
+<div id="modalRegisterErr" class="modal fade"> <!-- 半透明遮罩 -->
+    <div class="modal-dialog modal-sm"> <!-- 对话框尺寸、位置 -->
+        <div class="modal-content"> <!--边框、倒角、背景色-->
+            <!-- 头部 -->
+            <div class="modal-header">
+                <h4 class="modal-title">注册失败</h4>
+            </div>
+            <!-- 主体 -->
+            <div class="modal-body">
+                <p><b>新用户注册失败！</b></p>
+                <p>服务器返回错误消息：<span id="serverErrMsg"></span></p>
+            </div>
+            <!-- 尾部 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
