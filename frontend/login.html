@@ -78,6 +78,7 @@
 </div>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.js"></script>
+
 <script>
     $('#btLogin').click(function(){
         let username = $('#username').val()
@@ -96,10 +97,10 @@
             method: 'POST',
             url: 'http://127.0.0.1:5050/user/login',
             data: `username=${username}&password=${password}`,
+            xhrFields:{withCredentials:true},
             success: (data, msg, xhr)=>{
-                console.log('ok')
                 if(data.code===200){
-                    sessionStorage.setItem('user',data.user)
+                    sessionStorage.setItem('user',JSON.stringify(data.user))
                     window.location.href="room.html"
                 } else {
                     $('#serverErrMsg').html(data.msg)

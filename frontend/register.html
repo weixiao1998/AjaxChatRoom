@@ -187,7 +187,6 @@
             url: 'http://127.0.0.1:5050/user/register',
             data: `username=${username}&nickname=${nickname}&password=${password}&repwd=${repwd}&sex=${sex}&age=${age}&hobby=${hobby}`,
             success: (data, msg, xhr)=>{
-                console.log('ok')
                 if(data.code===200){
                     $('#modalRegisterSucc').modal()
                 } else {

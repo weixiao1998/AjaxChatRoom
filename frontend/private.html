@@ -41,22 +41,23 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Ajax聊天室</a>
+                    <a class="navbar-brand" href="room.html">Ajax聊天室</a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li><a href="room.html">公屏发言 <span class="sr-only">(current)</span></a></li>
-                        <li class="active"><a href="private.html">私聊</a></li>
+                        <li class="active"><a href="room.html">公屏聊天 <span class="sr-only">(current)</span></a></li>
+                        <li><a href="private.html">私聊</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                aria-haspopup="true" aria-expanded="false">用户名 <span class="caret"></span></a>
+                            <a href="#" id="navUsername" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                aria-haspopup="true" aria-expanded="false"></a>
                             <ul class="dropdown-menu">
                                 <li><a href="#">添加好友</a></li>
+                                <li><a href="#">个人中心</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="#">退出</a></li>
+                                <li><a onclick="logout()">注销</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -66,10 +67,10 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="list-group">
-                    <a href="#" class="list-group-item active">昵称</a>
-                    <a href="#" class="list-group-item">性别：</a>
-                    <a href="#" class="list-group-item">年龄：</a>
-                    <a href="#" class="list-group-item">兴趣爱好：</a>
+                    <a href="#" id="nickname" class="list-group-item active"></a>
+                    <a href="#" id="sex" class="list-group-item"></a>
+                    <a href="#" id="age" class="list-group-item"></a>
+                    <a href="#" id="hobby" class="list-group-item"></a>
                 </div>
             </div>
             <div class="col-md-9">
@@ -78,47 +79,12 @@
                       <h3 class="panel-title">私聊</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="well" style="height: 500px;overflow-y:scroll;">
-                            <div class="media">
-                                <div class="media-body">
-                                    <h5 class="media-heading"><b>【XXX】&nbsp&nbsp2019年12月19日 23:51:06</b></h5>
-                                    <h5>内容</h5>
-                                </div>
-                            </div>
-                            <div class="media">
-                                <div class="media-body">
-                                    <h5 class="media-heading"><b>【XXX】&nbsp&nbsp2019年12月19日 23:51:06</b></h5>
-                                    <h5>内容</h5>
-                                </div>
-                            </div>
-                            <div class="media">
-                                <div class="media-body">
-                                    <h5 class="media-heading"><b>【XXX】&nbsp&nbsp2019年12月19日 23:51:06</b></h5>
-                                    <h5>内容</h5>
-                                </div>
-                            </div>
-                            <div class="media">
-                                <div class="media-body">
-                                    <h5 class="media-heading"><b>【XXX】&nbsp&nbsp2019年12月19日 23:51:06</b></h5>
-                                    <h5>内容</h5>
-                                </div>
-                            </div>
-                            <div class="media">
-                                <div class="media-body">
-                                    <h5 class="media-heading"><b>【XXX】&nbsp&nbsp2019年12月19日 23:51:06</b></h5>
-                                    <h5>内容</h5>
-                                </div>
-                            </div>
-                            <div class="media">
-                                <div class="media-body">
-                                    <h5 class="media-heading"><b>【XXX】&nbsp&nbsp2019年12月19日 23:51:06</b></h5>
-                                    <h5>内容</h5>
-                                </div>
-                            </div>
+                        <div class="well" id="contentList" style="height: 500px;overflow-y:scroll;">
+                            
                         </div>
-                        <form action="" class="form-inline">
-                            <textarea class="form-control" name="content" style="width: 90%;"></textarea>
-                            <button class="btn btn-primary form-control" style="width: auto;">发送</button>
+                        <form class="form-inline">
+                            <textarea class="form-control" id="content" style="width: 90%;"></textarea>
+                            <button id="btSend" type="button" class="btn btn-primary form-control" style="width: auto;">发送</button>
                         </form>
                     </div>
                   </div>
@@ -128,7 +94,72 @@
     </div>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.js"></script>
+    <script src="js/base.js"></script>
+    <script>
+        var user1 = null
+        var user2 = null
+        var id = null
+        $(window).ready(() => {
+            user1 = JSON.parse(sessionStorage.getItem("user"))
+            if (user1 == null) {
+                alert("请先登录!")
+                window.location.href = "login.html"
+            }
+            id = getQueryString("id")
+            id = Number(id)
+            if (id==null || id=='' || id==NaN) {
+                alert("请选择私聊对象!")
+                window.location.href = "room.html"
+            }
+            $('#navUsername').html(`${user1.nickname}<span class="caret"></span>`)
+            getInfo()
+            updatePrivate()
+            setInterval(updatePrivate,1000)
+        })
 
+
+        function getInfo(){
+            $.ajax({
+                method: 'GET',
+                url: 'http://127.0.0.1:5050/user/getInfo',
+                data: `id=${id}`,
+                xhrFields:{withCredentials:true},
+                success: (data, msg, xhr) => {
+                    user2 = data.info
+                    $('#nickname').html(`${user2.nickname}`)
+                    $('#sex').html(`性别：${user2.sex}`)
+                    $('#age').html(`年龄：${user2.age}`)
+                    $('#hobby').html(`兴趣：${user2.hobby}`)
+                },
+                error: (xhr, err) => {
+                    console.log(xhr)
+                    console.log(err)
+                }
+            })
+        }
+
+        $('#btSend').click(()=>{
+            let content = $('#content').val()
+            $.ajax({
+                method: 'POST',
+                url: 'http://127.0.0.1:5050/private/send',
+                data: `uto=${id}&content=${content}`,
+                xhrFields:{withCredentials:true},
+                success: (data, msg, xhr) => {
+                    if(data.code==200){
+                        $('#content').val('')
+                        updatePrivate()
+                    } else {
+                        alert(data.msg)
+                    }
+                },
+                error: (xhr, err) => {
+                    console.log(xhr)
+                    console.log(err)
+                }
+            })
+        })
+    </script>
 </body>
 
 </html>
