@@ -48,12 +48,12 @@
                 <form class="form-horizontal">
                     <!-- 用户名 -->
                     <div class="form-group">
-                        <label for="uname" class="col-md-4 control-label">用户名：</label>
+                        <label for="username" class="col-md-4 control-label">用户名：</label>
                         <div class="col-md-4">
-                            <input id="uname" type="text" class="form-control">
+                            <input id="username" type="text" class="form-control">
                         </div>
                         <div class="col-md-4">
-                            <span id="unameMsg" class="help-block"></span>
+                            <span id="usernameMsg" class="help-block"></span>
                         </div>
                     </div>
                     <!-- 昵称 -->
@@ -63,17 +63,17 @@
                             <input id="nickname" type="text" class="form-control">
                         </div>
                         <div class="col-md-4">
-                            <span class="help-block"></span>
+                            <span id="nicknameMsg" class="help-block"></span>
                         </div>
                     </div>
                     <!-- 密码 -->
                     <div class="form-group">
-                        <label for="upwd" class="col-md-4 control-label">密码：</label>
+                        <label for="password" class="col-md-4 control-label">密码：</label>
                         <div class="col-md-4">
-                            <input id="upwd" type="password" class="form-control">
+                            <input id="password" type="password" class="form-control">
                         </div>
                         <div class="col-md-4">
-                            <span class="help-block"></span>
+                            <span id="passwordMsg" class="help-block"></span>
                         </div>
                     </div>
                     <!-- 确认密码 -->
@@ -133,31 +133,59 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.js"></script>
 <script>
-
     /*为btRegister按钮添加事件监听*/
     $('#btRegister').click(function(){
         //读取所有的表单输入
-        let uname = $('#uname').val()
-        let nickname = $('#uname').val()
-        let upwd = $('#upwd').val()
+        let username = $('#username').val()
+        let nickname = $('#nickname').val()
+        let password = $('#password').val()
         let repwd = $('#repwd').val()
         let sex = $('#sex').val()
         let age = $('#age').val()
         let hobby = $('#hobby').val()
-        console.log(uname,nickname,upwd,repwd,sex,age,hobby)
         //验证表单输入的合法性
-        if(uname.length<3){
-            $('#unameMsg').html('用户名长度太短了').removeClass('alert-info').addClass('alert-danger')
-        } else if(uname.length>12){
-            $('#unameMsg').html('用户名长度太长了').removeClass('alert-info').addClass('alert-danger')
+        if(username.length<3){
+            $('#usernameMsg').html('用户名太短了').removeClass('alert-info').addClass('alert-danger')
+            return
+        } else if(username.length>12){
+            $('#usernameMsg').html('用户名太长了').removeClass('alert-info').addClass('alert-danger')
+            return
         } else {
-            $('#unameMsg').html('用户名长度合法').removeClass('alert-danger').addClass('alert-info')
+            $('#usernameMsg').html('用户名长度合法').removeClass('alert-danger').addClass('alert-info')
         }
+
+        if(password.length<3){
+            $('#passwordMsg').html('密码太短了').removeClass('alert-info').addClass('alert-danger')
+            return
+        } else if(password.length>40){
+            $('#passwordMsg').html('密码太长了').removeClass('alert-info').addClass('alert-danger')
+            return
+        } else {
+            $('#passwordMsg').html('密码长度合法').removeClass('alert-danger').addClass('alert-info')
+        }
+
+        if(nickname.length<2){
+            $('#nicknameMsg').html('昵称太短了').removeClass('alert-info').addClass('alert-danger')
+            return
+        } else if(nickname.length>40){
+            $('#nicknameMsg').html('昵称太长了').removeClass('alert-info').addClass('alert-danger')
+            return
+        } else {
+            $('#nicknameMsg').html('昵称长度合法').removeClass('alert-danger').addClass('alert-info')
+        }
+
+        if(password!=repwd){
+            $('#passwordMsg').html('两次密码不一致').removeClass('alert-info').addClass('alert-danger')
+            return
+        } else {
+            $('#passwordMsg').html('密码合法').removeClass('alert-danger').addClass('alert-info')
+        }
+
         //异步提交用户的输入给后台API
         $.ajax({
             method: 'POST',
             url: 'http://127.0.0.1:5050/user/register',
-            data: `uname=${uname}&upwd=${upwd}&email=${email}&phone=${phone}`,
+            data: `username=${username}&nickname=${nickname}&password=${password}&repwd=${repwd}&sex=${sex}&age=${age}&hobby=${hobby}`,
             success: (data, msg, xhr)=>{
                 console.log('ok')
                 if(data.code===200){
@@ -168,7 +196,6 @@
                 }
             },
             error: (xhr,err)=>{
-                console.log('err')
                 console.log(xhr)
                 console.log(err)
             }
@@ -189,7 +216,7 @@
             </div>
             <!-- 尾部 -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-dismiss="modal">确定</button>
+                <button type="button" class="btn btn-info" data-dismiss="modal" onclick="window.location.href='login.html'">确定</button>
             </div>
         </div>
     </div>
