@@ -247,8 +247,8 @@ server.get('/user/getInfo',(req,res)=>{
 })
 
 server.get('/public/getAll',(req,res)=>{
-    //let sql = 'SELECT cr_public.*,username FROM cr_public,cr_user WHERE cr_public.userid=cr_user.id AND time >= ? ORDER BY time'
-    let sql = 'SELECT cr_public.*,nickname FROM cr_public,cr_user WHERE cr_public.userid=cr_user.id ORDER BY time'
+    let sql = 'SELECT cr_public.*,username FROM cr_public,cr_user WHERE cr_public.userid=cr_user.id AND time >= ? ORDER BY time'
+    //let sql = 'SELECT cr_public.*,nickname FROM cr_public,cr_user WHERE cr_public.userid=cr_user.id ORDER BY time'
     pool.query(sql, [req.session.loginTime], (err, result) => {
         if (err) throw err
         res.json(result)
